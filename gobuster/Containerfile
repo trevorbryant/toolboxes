@@ -1,0 +1,19 @@
+ARG VERSION=35
+FROM registry.fedoraproject.org/fedora-toolbox:${VERSION}
+
+ENV NAME=gobuster VERSION=${VERSION}
+ARG VERSION
+
+LABEL com.redhat.component=$NAME \
+      com.github.containers.toolbox="true" \
+      name="toolboxes/$NAME" \
+      version="$VERSION" \
+      maintainer="Trevor Bryant <trevorbryant@gmail.com>"
+
+ENV GOBIN=/usr/local/libexec/
+ENV PATH=$GOBIN:$PATH
+
+RUN dnf install --assumeyes \
+    go \
+    && go install github.com/OJ/gobuster/v3@latest \
+    && dnf -y clean all
